@@ -16,6 +16,7 @@ import { Typography } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import CloseIcon from '@mui/icons-material/Close'
+import Divider from '@mui/material/Divider'
 
 // Other imports
 import logo from "./images/cat-silhoutte.png"
@@ -48,6 +49,25 @@ const theme = createTheme({
     fontFamily: 'Nunito',
   },
 });
+
+// Test data for results
+const catBreedResultsList = [
+  {
+    id: 1,
+    catBreed: 'Tuxedo',
+    percentage: 90
+  },
+  {
+    id: 2,
+    catBreed: 'Domestic Shorthair',
+    percentage: 2
+  },
+  {
+    id: 3,
+    catBreed: 'Chausie',
+    percentage: 1
+  }
+]
 
 function App() {
   // states
@@ -120,10 +140,10 @@ function App() {
                         justifyContent="center"
                         alignItems="center"
                   >
-                    <Grid item xs={12} textAlign={"center"}>
-                      <img src={catImage} alt="displaying cat" id="img"/>
+                    <Grid item xs={9} md={10} textAlign={"center"}>
+                      <img src={catImage} alt="displaying cat" id="img" style={{ width: "100%", height: "auto" }}/>
                     </Grid>
-                    <Grid item xs={12} textAlign={"center"}>
+                    <Grid item xs={9} md={10} textAlign={"center"}>
                       <Typography variant="body1">
                         <p>This cat is a {catBreed}</p>
                         <Typography variant="caption">
@@ -131,9 +151,25 @@ function App() {
                         </Typography>
                       </Typography>
                     </Grid>
-                    <Grid item xs={12} textAlign={"center"}>
-                      <CatBreedResult />
-                    </Grid>
+                  </Grid>
+                  <Grid container
+                        rowSpacing={2} 
+                        justifyContent="center"
+                        alignItems="center"
+                  >
+                    {/* <Grid item xs={2} textAlign={"left"}>Tuxedo</Grid>
+                    <Grid item xs={9} textAlign={"center"} sx={{ display: 'inline' }}><Divider /></Grid>
+                    <Grid item xs={1} textAlign={"right"}>90%</Grid>
+
+                    <Grid item xs={2} textAlign={"left"}>Domestic Shorthair</Grid>
+                    <Grid item xs={9} textAlign={"center"} sx={{ display: 'inline' }}><Divider /></Grid>
+                    <Grid item xs={1} textAlign={"right"}>2%</Grid>
+
+                    <Grid item xs={2} textAlign={"left"}>Chausie</Grid>
+                    <Grid item xs={9} textAlign={"center"} sx={{ display: 'inline' }}><Divider /></Grid>
+                    <Grid item xs={1} textAlign={"right"}>1%</Grid> */}
+                    <CatBreedResult catBreedResultsList={catBreedResultsList}/>
+
                   </Grid>
                 </Container>
               </>

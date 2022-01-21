@@ -1,44 +1,31 @@
 import React from 'react'
 import Grid from '@mui/material/Grid'
 import Divider from '@mui/material/Divider'
+import { Typography } from '@mui/material'
 
-const catBreedResultsList = [
-    {
-      id: 1,
-      catBreed: 'Tuxedo',
-      percentage: 90
-    },
-    {
-      id: 2,
-      catBreed: 'Domestic Shorthair',
-      percentage: 2
-    },
-    {
-      id: 3,
-      catBreed: 'Chausie',
-      percentage: 1
-    }
-]
-
-const CatBreedResult = () => {
+const CatBreedResult = ({ catBreedResultsList }) => {
     return (
-        <div>
+        <>
             {catBreedResultsList.map((cat) => (
               <>
-                <Grid item xs={4} textAlign={"center"}>
-                  {cat.catBreed}
+                <Grid item xs={6} md={2} textAlign={"left"}>
+                  <Typography variant="body1">
+                    {cat.catBreed}
+                  </Typography>
                 </Grid>
-                <Grid item xs={4} textAlign={"center"}>
-                  ------------------
+                <Grid item md={8} textAlign={"center"} sx={{ display: { xs: "none", md: "inline" } }}>
+                  <Typography variant="body1">
+                    <Divider/>
+                  </Typography>
                 </Grid>
-                <Grid item xs={4} textAlign={"center"}>
-                  {cat.percentage} %
+                <Grid item xs={6} md={2} textAlign={"right"}>
+                  <Typography variant="body1">
+                    {cat.percentage}%
+                  </Typography>
                 </Grid>
               </>
-              
-              // <p>{cat.catBreed} ----------------- {cat.percentage}%</p>
             ))}
-        </div>
+        </>
     )
 }
 
