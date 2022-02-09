@@ -1,7 +1,9 @@
-import React from 'react'
-import Grid from '@mui/material/Grid'
-import Divider from '@mui/material/Divider'
-import { Typography } from '@mui/material'
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import Grid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
+import { Typography } from '@mui/material';
 
 const CatBreedResult = ({ catBreedResultsList }) => {
     return (
@@ -27,6 +29,10 @@ const CatBreedResult = ({ catBreedResultsList }) => {
             ))}
         </>
     )
+}
+
+CatBreedResult.propTypes = {
+  catBreedResultsList: PropTypes.array
 }
 
 export default CatBreedResult

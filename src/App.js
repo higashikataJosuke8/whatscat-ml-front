@@ -1,9 +1,14 @@
 // THINGS TO DO
-// Fit image into a container
-// Loading screen
-// Dialog before submit
+// Loading screen (not sure if needed)
 // Fixing text results align in Result page
-// A way to go back to the home page
+// If the upload is not an image, raise an error dialog
+// If the user returned from the results page to the image capture, remove the recent uploaded image
+// Put a logo next to the header
+
+// TASKS FINISHED [FEB 9, 2022]
+// Fixing text results align in Result page
+// Added confirmation dialog before uploading image
+// Tweaked imageHandler function, but error may still randomly appear, not sure of the cause 
 
 // React imports
 import { useState } from 'react'
@@ -14,9 +19,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Container from '@mui/material/Container'
 import { Typography } from '@mui/material'
 import Grid from '@mui/material/Grid'
-import Box from '@mui/material/Box'
-import CloseIcon from '@mui/icons-material/Close'
-import Divider from '@mui/material/Divider'
+
+// CSS imports
+import "./App.css"
 
 // Other imports
 import logo from "./images/cat-silhoutte.png"
@@ -27,7 +32,7 @@ import Header from './components/Header'
 import ButtonOutlined from './components/ButtonOutlined'
 import ButtonContained from './components/ButtonContained'
 import CatBreedResult from './components/CatBreedResult'
-import { pink } from '@mui/material/colors'
+import AlertDialog from './components/AlertDialog'
 
 // Changing primary and secondary colors
 const theme = createTheme({
@@ -50,7 +55,7 @@ const theme = createTheme({
   },
 });
 
-// Test data for results
+// Test data for result list
 const catBreedResultsList = [
   {
     id: 1,
@@ -73,6 +78,8 @@ function App() {
   // states
   const [catImage, setCatImage] = useState(logo)
   const [catImageUploaded, setCatImageUploaded] = useState(true)
+  // used in AlertDialog
+  const [openDialog, setOpenDialog] = useState(false);
 
   // variables
   const catBreed = 'tuxedo'
@@ -81,15 +88,28 @@ function App() {
   const imageHandler = (e) => {
     const reader = new FileReader();
 
-    reader.onload = () => {
+    reader.onload = (e) => {
       if(reader.readyState === 2){
         setCatImage(reader.result)
         setCatImageUploaded(false)
       } 
     }
+
+    console.log(e.target.files[0])
     reader.readAsDataURL(e.target.files[0])
 
   }
+
+  // function for handling dialog opening
+  const handleClickOpen = () => {
+    setOpenDialog(true);
+  };
+
+  // function for handling dialog closing
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -109,8 +129,8 @@ function App() {
                         justifyContent="center"
                         alignItems="center"
                   >
-                    <Grid item xs={9} md={10} textAlign={"center"}>
-                      <img src={catImage} alt="displaying cat" id="img" style={{ width: "100%", height: "auto" }} />
+                    <Grid item xs={12} md={10} textAlign={"center"}>
+                      <img src={catImage} alt="displaying cat" id="img" style={{ width: "75%", height: "auto" }} />
                     </Grid>
                     <Grid item xs={9} md={5} textAlign={"center"}>
                       <ButtonOutlined inputType='file' captureType='user' acceptType='image/*' onChange={imageHandler} buttonText='Capture Image' />          
@@ -119,10 +139,12 @@ function App() {
                       <ButtonOutlined inputType='file' onChange={imageHandler} buttonText='Upload Image'/>
                     </Grid>
                     <Grid item xs={9} md={10} textAlign={"center"}>
-                    <ButtonContained inputType='submit' buttonText='Submit' imageUploaded={catImageUploaded}/>
+                      <ButtonContained inputType='submit' buttonText='Submit' imageUploaded={catImageUploaded} onClick={handleClickOpen}/>
                     </Grid>
                   </Grid>
                   
+                  {/* Alert dialog */}
+                  <AlertDialog openDialog={openDialog} handleClose={handleClose} imageUploaded={catImageUploaded}/>
                 </Container>
               </>
             }></Route>
@@ -157,17 +179,6 @@ function App() {
                         justifyContent="center"
                         alignItems="center"
                   >
-                    {/* <Grid item xs={2} textAlign={"left"}>Tuxedo</Grid>
-                    <Grid item xs={9} textAlign={"center"} sx={{ display: 'inline' }}><Divider /></Grid>
-                    <Grid item xs={1} textAlign={"right"}>90%</Grid>
-
-                    <Grid item xs={2} textAlign={"left"}>Domestic Shorthair</Grid>
-                    <Grid item xs={9} textAlign={"center"} sx={{ display: 'inline' }}><Divider /></Grid>
-                    <Grid item xs={1} textAlign={"right"}>2%</Grid>
-
-                    <Grid item xs={2} textAlign={"left"}>Chausie</Grid>
-                    <Grid item xs={9} textAlign={"center"} sx={{ display: 'inline' }}><Divider /></Grid>
-                    <Grid item xs={1} textAlign={"right"}>1%</Grid> */}
                     <CatBreedResult catBreedResultsList={catBreedResultsList}/>
 
                   </Grid>

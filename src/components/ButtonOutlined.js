@@ -1,7 +1,8 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { styled } from '@mui/material/styles'
-import Button from '@mui/material/Button'
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
 
 const Input = styled('input')({
     display: 'none',
@@ -21,7 +22,19 @@ const ButtonOutlined = ({ inputType, captureType, acceptType, onChange, buttonTe
                 {buttonText}
             </Button>   
         </label>
-    );
+    )
+}
+
+ButtonOutlined.defaultProps = {
+    buttonText: "Button"
+}
+
+ButtonOutlined.propTypes = {
+    inputType: PropTypes.string,
+    captureType: PropTypes.string,
+    acceptType: PropTypes.string,
+    onChange: PropTypes.func,
+    buttonText: PropTypes.string
 }
 
 export default ButtonOutlined

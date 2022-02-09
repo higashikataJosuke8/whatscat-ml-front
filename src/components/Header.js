@@ -1,14 +1,12 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {Link} from 'react-router-dom'
+import React from 'react';
+import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import CloseIcon from '@mui/icons-material/Close'
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Header = ({ title, hasLeftIcon }) => {
     return (
