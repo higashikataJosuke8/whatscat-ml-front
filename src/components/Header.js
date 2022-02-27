@@ -8,26 +8,20 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-const Header = ({ title, hasLeftIcon }) => {
+const Header = ({ title, hasLeftIcon, icon }) => {
     return (
         <header>
             <AppBar position="static">
                 <Toolbar>
-                    {   // Checking whether their is a left icon or not
-                        hasLeftIcon ?
-                        <Link to='/' style={{ color: 'inherit', textDecoration: 'inherit' }}>
-                            <IconButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr:2 }}
-                            >
-                                <CloseIcon />
-                            </IconButton>
-                        </Link>  
-                        : <></>
-                    }
+                    <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    sx={{ mr:2 }}
+                    >
+                        <img src={icon} style={{ maxWidth: '33px' }} />
+                    </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         {title}
                     </Typography>
@@ -38,13 +32,14 @@ const Header = ({ title, hasLeftIcon }) => {
 }
 
 Header.defaultProps = {
-    title: 'Image Capture',
+    title: 'Title',
     hasLeftIcon: false
 }
 
 Header.propTypes = {
     title: PropTypes.string,
-    hasLeftIcon: PropTypes.bool
+    hasLeftIcon: PropTypes.bool,
+    icon: PropTypes.string
 }
 
 export default Header

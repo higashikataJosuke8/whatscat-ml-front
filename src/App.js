@@ -1,14 +1,14 @@
 // THINGS TO DO
-// Loading screen (not sure if needed)
-// Fixing text results align in Result page
 // If the upload is not an image, raise an error dialog
 // If the user returned from the results page to the image capture, remove the recent uploaded image
-// Put a logo next to the header
+// The Proceed button in the confirmation dialog should be contained
+// Logo is not present on Results page on larger screen
 
-// TASKS FINISHED [FEB 9, 2022]
-// Fixing text results align in Result page
-// Added confirmation dialog before uploading image
-// Tweaked imageHandler function, but error may still randomly appear, not sure of the cause 
+// TASKS FINISHED
+// Put a logo next to the header
+// Remove the cancel button on the Results page if screen is md or lg
+// Fix the results page alignment
+// Make the correct breed have a primary color on the results page
 
 // React imports
 import { useState } from 'react'
@@ -25,10 +25,12 @@ import "./App.css"
 
 // Other imports
 import logo from "./images/cat-silhoutte.png"
+import brandLogo from './images/whatscat-icon-sm.png'
 import '@fontsource/nunito'
 
 // Local component imports
 import Header from './components/Header'
+import HeaderCancel from './components/HeaderCancel'
 import ButtonOutlined from './components/ButtonOutlined'
 import ButtonContained from './components/ButtonContained'
 import CatBreedResult from './components/CatBreedResult'
@@ -52,6 +54,9 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: 'Nunito',
+    highBreedPct: {
+      color: '#7c1fa3'
+    },
   },
 });
 
@@ -118,7 +123,7 @@ function App() {
             <Route path='/' element={
               <>
                 {/* Image Capture screen */}
-                <Header title='Image Capture' />
+                <Header title='Image Capture' icon={brandLogo}/>
                 <Container maxWidth="md" 
                            sx={{
                               my: 5,
@@ -130,7 +135,7 @@ function App() {
                         alignItems="center"
                   >
                     <Grid item xs={12} md={10} textAlign={"center"}>
-                      <img src={catImage} alt="displaying cat" id="img" style={{ width: "75%", height: "auto" }} />
+                      <img src={catImage} alt="displaying cat" id="img" style={{ width: "75%", height: "auto" }}/>
                     </Grid>
                     <Grid item xs={9} md={5} textAlign={"center"}>
                       <ButtonOutlined inputType='file' captureType='user' acceptType='image/*' onChange={imageHandler} buttonText='Capture Image' />          
@@ -151,7 +156,7 @@ function App() {
             <Route path='/result' element={
               <>
                 {/* Result screen */}
-                <Header title='Result' hasLeftIcon={true}/>
+                <HeaderCancel title='Result' hasLeftIcon={true}/>
                 <Container maxWidth="md"
                            sx={{
                               my: 5,
@@ -162,12 +167,12 @@ function App() {
                         justifyContent="center"
                         alignItems="center"
                   >
-                    <Grid item xs={9} md={10} textAlign={"center"}>
-                      <img src={catImage} alt="displaying cat" id="img" style={{ width: "100%", height: "auto" }}/>
+                    <Grid item xs={12} md={10} textAlign={"center"}>
+                      <img src={catImage} alt="displaying cat" id="img" style={{ width: "75%", height: "auto" }}/>
                     </Grid>
                     <Grid item xs={9} md={10} textAlign={"center"}>
                       <Typography variant="body1">
-                        <p>This cat is a {catBreed}</p>
+                        This cat is a <Typography style={{ display: 'inline-block' }} color="primary"><strong>{catBreedResultsList[0].catBreed.toLowerCase()}</strong></Typography>
                         <Typography variant="caption">
                           <Link to='/' style={{ textDecoration: 'none' }}><p>TRY AGAIN</p></Link>
                         </Typography>
@@ -179,8 +184,9 @@ function App() {
                         justifyContent="center"
                         alignItems="center"
                   >
+                    
                     <CatBreedResult catBreedResultsList={catBreedResultsList}/>
-
+                    
                   </Grid>
                 </Container>
               </>
