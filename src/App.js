@@ -1,14 +1,15 @@
-// THINGS TO DO
-// If the upload is not an image, raise an error dialog
-// If the user returned from the results page to the image capture, remove the recent uploaded image
-// The Proceed button in the confirmation dialog should be contained
-// Logo is not present on Results page on larger screen
+// TASKS TO DO
+// If the user returned from the results page to the image capture, remove the recent uploaded image (not sure if needed)
 
-// TASKS FINISHED
-// Put a logo next to the header
-// Remove the cancel button on the Results page if screen is md or lg
-// Fix the results page alignment
-// Make the correct breed have a primary color on the results page
+// ONGOING TASKS
+// imageHandler still malfunctioning
+
+// FINISHED TASKS
+// Logo is not present on Results page on larger screen
+// If the upload is not an image, raise an error alert
+// The Proceed button in the confirmation dialog should be contained
+// Create caption specifying the minimum image dimension
+// Create caption specifying that image should not be blurry or it would cause issues
 
 // React imports
 import { useState } from 'react'
@@ -35,6 +36,7 @@ import ButtonOutlined from './components/ButtonOutlined'
 import ButtonContained from './components/ButtonContained'
 import CatBreedResult from './components/CatBreedResult'
 import AlertDialog from './components/AlertDialog'
+import ErrorAlert from './components/ErrorAlert'
 
 // Changing primary and secondary colors
 const theme = createTheme({
@@ -81,19 +83,35 @@ const catBreedResultsList = [
 
 function App() {
   // states
-  const [catImage, setCatImage] = useState(logo)
-  const [catImageUploaded, setCatImageUploaded] = useState(true)
+  const [catImage, setCatImage] = useState(logo);
+  const [catImageUploaded, setCatImageUploaded] = useState(true);
   // used in AlertDialog
   const [openDialog, setOpenDialog] = useState(false);
+  // state for checking whether the upload is an image or not
+  const [uploadNotImage, setUploadNotImage] = useState(false);
 
-  // variables
-  const catBreed = 'tuxedo'
-  
   // image handler (for responsive image uploads), also used for knowing whether a cat image is uploaded already
+  // also used on checking whether the upload is an image or not
   const imageHandler = (e) => {
+    console.log("Image handler commencing...")
+    
+    // code for handling non-image uploads
+    const image = e.target.files[0]
+    const imageType = image["type"]
+    console.log("imageType has a typeof " + typeof(imageType))
+    const validImageTypes = ["image/jpeg", "image/png", "image/jpg"]
+    
+    if (!validImageTypes.includes(imageType)){
+      console.log("The uploaded file is not an image!")
+      setUploadNotImage(true)
+      setCatImage(logo)
+      console.log("uploadNotImage is " + uploadNotImage)
+      // uploadValidation();
+      return;
+    }
+      
     const reader = new FileReader();
-
-    reader.onload = (e) => {
+    reader.onload = () => {
       if(reader.readyState === 2){
         setCatImage(reader.result)
         setCatImageUploaded(false)
@@ -108,13 +126,27 @@ function App() {
   // function for handling dialog opening
   const handleClickOpen = () => {
     setOpenDialog(true);
+    console.log("Dialog opened!")
   };
-
+  
   // function for handling dialog closing
   const handleClose = () => {
     setOpenDialog(false);
+    console.log("Dialog closed!")
   };
 
+  // function for handling error alert closing
+  const handleAlertClose = () => {
+    setUploadNotImage(false);
+  }
+
+  // function for handling non-image uploaded files
+  // const uploadValidationResponse = () => {
+  //   console.log("The uploaded file is not an image!")
+  //   setUploadNotImage(true)
+  //   setCatImage(logo)
+  //   console.log("uploadNotImage is " + uploadNotImage)
+  // }
 
   return (
     <ThemeProvider theme={theme}>
@@ -124,6 +156,8 @@ function App() {
               <>
                 {/* Image Capture screen */}
                 <Header title='Image Capture' icon={brandLogo}/>
+                {/* <Alert severity="error">The uploaded file must be an image (only accepts .png and .jpeg)</Alert> */}
+                <ErrorAlert uploadNotImage={uploadNotImage} onClick={handleAlertClose} />
                 <Container maxWidth="md" 
                            sx={{
                               my: 5,
@@ -137,11 +171,14 @@ function App() {
                     <Grid item xs={12} md={10} textAlign={"center"}>
                       <img src={catImage} alt="displaying cat" id="img" style={{ width: "75%", height: "auto" }}/>
                     </Grid>
+                    <Grid item xs={9} md={10} textAlign={"center"}>
+                      <Typography variant="caption">Minimum image dimensions are 300x300, make sure it's not blurry to avoid problems!</Typography>
+                    </Grid>
                     <Grid item xs={9} md={5} textAlign={"center"}>
                       <ButtonOutlined inputType='file' captureType='user' acceptType='image/*' onChange={imageHandler} buttonText='Capture Image' />          
                     </Grid>
                     <Grid item xs={9} md={5} textAlign={"center"}>
-                      <ButtonOutlined inputType='file' onChange={imageHandler} buttonText='Upload Image'/>
+                      <ButtonOutlined inputType='file' acceptType='image/*' onChange={imageHandler} buttonText='Upload Image'/>
                     </Grid>
                     <Grid item xs={9} md={10} textAlign={"center"}>
                       <ButtonContained inputType='submit' buttonText='Submit' imageUploaded={catImageUploaded} onClick={handleClickOpen}/>
@@ -156,7 +193,7 @@ function App() {
             <Route path='/result' element={
               <>
                 {/* Result screen */}
-                <HeaderCancel title='Result' hasLeftIcon={true}/>
+                <HeaderCancel title='Result' icon={brandLogo}/>
                 <Container maxWidth="md"
                            sx={{
                               my: 5,

@@ -17,6 +17,7 @@ const ButtonOutlined = ({ inputType, captureType, acceptType, onChange, buttonTe
                 capture={captureType} 
                 accept={acceptType} 
                 onChange={onChange}
+                onClick={(e) => {e.target.value = null}}
             />
             <Button variant="outlined" component="span" fullWidth>
                 {buttonText}

@@ -7,6 +7,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 
+
 const AlertDialog = ({ openDialog, handleClose, imageUploaded }) => {
     // const [open, setOpen] = useState(false);
 
@@ -24,15 +25,16 @@ const AlertDialog = ({ openDialog, handleClose, imageUploaded }) => {
                 open={openDialog}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
+                PaperProps={{ sx: { width: "212px", height: "124px" } }}
             >
                 <DialogTitle id="alert-dialog-title">
                     {"Proceed upload?"}
                 </DialogTitle>
 
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose} sx={{ mr: 1 }}>Cancel</Button>
                     <Link to={imageUploaded ? '#' : '/result'} style={{ textDecoration: 'none' }}>
-                        <Button onClick={handleClose} autoFocus>Proceed</Button>
+                        <Button variant="contained" onClick={handleClose} autoFocus>Proceed</Button>
                     </Link>
                 </DialogActions>
             </Dialog> 
