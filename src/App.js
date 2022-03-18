@@ -1,19 +1,19 @@
 // TASKS TO DO
 // If the user returned from the results page to the image capture, remove the recent uploaded image (not sure if needed)
+// Creating separate page components for clarity on App.js (not sure)
 
 // ONGOING TASKS
 // imageHandler still malfunctioning
 
 // FINISHED TASKS
-// Logo is not present on Results page on larger screen
-// If the upload is not an image, raise an error alert
-// The Proceed button in the confirmation dialog should be contained
-// Create caption specifying the minimum image dimension
-// Create caption specifying that image should not be blurry or it would cause issues
+// Change picture when no image is present
+// If prior upload is image, then a non-image file, the file itself can still be uploaded
+// Changing tab icons and name
 
 // React imports
 import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
+import { Helmet } from "react-helmet"
 
 // Material UI imports
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -25,7 +25,7 @@ import Grid from '@mui/material/Grid'
 import "./App.css"
 
 // Other imports
-import logo from "./images/cat-silhoutte.png"
+import logo from "./images/no-image-present.png"
 import brandLogo from './images/whatscat-icon-sm.png'
 import '@fontsource/nunito'
 
@@ -105,8 +105,8 @@ function App() {
       console.log("The uploaded file is not an image!")
       setUploadNotImage(true)
       setCatImage(logo)
+      setCatImageUploaded(true)
       console.log("uploadNotImage is " + uploadNotImage)
-      // uploadValidation();
       return;
     }
       
@@ -154,6 +154,9 @@ function App() {
           <Routes> 
             <Route path='/' element={
               <>
+                <Helmet>
+                  <title>Image Capture — WhatsCat</title>
+                </Helmet>
                 {/* Image Capture screen */}
                 <Header title='Image Capture' icon={brandLogo}/>
                 {/* <Alert severity="error">The uploaded file must be an image (only accepts .png and .jpeg)</Alert> */}
@@ -172,7 +175,7 @@ function App() {
                       <img src={catImage} alt="displaying cat" id="img" style={{ width: "75%", height: "auto" }}/>
                     </Grid>
                     <Grid item xs={9} md={10} textAlign={"center"}>
-                      <Typography variant="caption">Minimum image dimensions are 300x300, make sure it's not blurry to avoid problems!</Typography>
+                      <Typography variant="caption">Minimum image dimensions are 300x300 (only accepts .png, .jpg, and .jpeg), make sure it's not blurry to avoid problems!</Typography>
                     </Grid>
                     <Grid item xs={9} md={5} textAlign={"center"}>
                       <ButtonOutlined inputType='file' captureType='user' acceptType='image/*' onChange={imageHandler} buttonText='Capture Image' />          
@@ -192,6 +195,9 @@ function App() {
             }></Route>
             <Route path='/result' element={
               <>
+                <Helmet>
+                  <title>Results — WhatsCat</title>
+                </Helmet>
                 {/* Result screen */}
                 <HeaderCancel title='Result' icon={brandLogo}/>
                 <Container maxWidth="md"
