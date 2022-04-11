@@ -127,6 +127,39 @@ function App() {
   const handleClickOpen = () => {
     setOpenDialog(true);
     console.log("Dialog opened!")
+
+    // get file data
+    // I need file object... catImage is the image itself in base64...
+    let img = document.getElementById('outlined-button').files[0]
+    let formData = new FormData()
+    formData.append('img', img, img['name'])
+
+    let requestOptions = {
+      method: 'POST',
+      body: formData
+    };
+
+    // send POST request to REST API
+    fetch('https://whatscat-api.ml/v1/predict', requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      let predictions = result['predictions']
+      const topPredictions = 3
+      catBreedResultsList = []
+
+      for(let i = 0; i < topPredictions; i++){  
+        catBreedResultsList.push({
+          id: i + 1,
+          catBreed: predictions[i][1],
+          percentage: predictions[i][0]
+        });
+      }
+      console.log('Success:', catBreedResultsList)
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+    
   };
   
   // function for handling dialog closing
