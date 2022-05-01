@@ -1,270 +1,89 @@
-// TASKS TO DO
-// If the user returned from the results page to the image capture, remove the recent uploaded image (not sure if needed)
-// Creating separate page components for clarity on App.js (not sure)
-
-// ONGOING TASKS
-// imageHandler still malfunctioning
-
-// FINISHED TASKS
-// Change picture when no image is present
-// If prior upload is image, then a non-image file, the file itself can still be uploaded
-// Changing tab icons and name
-
 // React imports
-import { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
+import { useState } from "react"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import { Helmet } from "react-helmet"
 
 // Material UI imports
-import { createTheme, ThemeProvider } from '@mui/material/styles'
-import Container from '@mui/material/Container'
-import { Typography } from '@mui/material'
-import Grid from '@mui/material/Grid'
+import { createTheme, ThemeProvider } from "@mui/material/styles"
 
 // CSS imports
 import "./App.css"
 
+// Image imports
+import noImagePresent from "./images/NoImage.png"
+
 // Other imports
-import logo from "./images/no-image-present.png"
-import brandLogo from './images/whatscat-icon-sm.png'
-import '@fontsource/nunito'
+import "@fontsource/nunito"
 
 // Local component imports
-import Header from './components/Header'
-import HeaderCancel from './components/HeaderCancel'
-import ButtonOutlined from './components/ButtonOutlined'
-import ButtonContained from './components/ButtonContained'
-import CatBreedResult from './components/CatBreedResult'
-import AlertDialog from './components/AlertDialog'
-import ErrorAlert from './components/ErrorAlert'
+import ImageCapturePage from "./components/ImageCapturePage"
+import ResultsPage from "./components/ResultsPage"
 
-// Changing primary and secondary colors
+// Theme for the components
 const theme = createTheme({
   palette: {
     primary: {
-      light: '#af52d5',
-      main: '#7c1fa3',
-      dark: '#4b0073',
-      contrastText: '#fff',
+      light: "#ae52d4",
+      main: "#7b1fa2",
+      dark: "#4a0072",
+      contrastText: "#fff",
     },
     secondary: {
-      light: '#af52d5',
-      main: '#7c1fa3',
-      dark: '#4b0073',
-      contrastText: '#000',
+      light: "#ae52d4",
+      main: "#7b1fa2",
+      dark: "#4a0072",
+      contrastText: "#000",
     },
   },
   typography: {
-    fontFamily: 'Nunito',
+    fontFamily: "Nunito",
     highBreedPct: {
-      color: '#7c1fa3'
+      color: "#7b1fa2"
     },
   },
 });
 
-// Test data for result list
-const catBreedResultsList = [
-  {
-    id: 1,
-    catBreed: 'Tuxedo',
-    percentage: 90
-  },
-  {
-    id: 2,
-    catBreed: 'Domestic Shorthair',
-    percentage: 2
-  },
-  {
-    id: 3,
-    catBreed: 'Chausie',
-    percentage: 1
-  }
-]
-
 function App() {
-  // states
-  const [catImage, setCatImage] = useState(logo);
-  const [catImageUploaded, setCatImageUploaded] = useState(true);
-  // used in AlertDialog
-  const [openDialog, setOpenDialog] = useState(false);
-  // state for checking whether the upload is an image or not
-  const [uploadNotImage, setUploadNotImage] = useState(false);
+  // State which stores the uploaded file
+  const [catImage, setCatImage] = useState(noImagePresent);
+  // State for the results
+  const [finalResult, setFinalResult] = useState(null);
+  // State for checking if response from whatscat-api is okay
+  const [responseOk, setResponseOk] = useState(false);
 
-  // image handler (for responsive image uploads), also used for knowing whether a cat image is uploaded already
-  // also used on checking whether the upload is an image or not
-  const imageHandler = (e) => {
-    console.log("Image handler commencing...")
-    
-    // code for handling non-image uploads
-    const image = e.target.files[0]
-    const imageType = image["type"]
-    console.log("imageType has a typeof " + typeof(imageType))
-    const validImageTypes = ["image/jpeg", "image/png", "image/jpg"]
-    
-    if (!validImageTypes.includes(imageType)){
-      console.log("The uploaded file is not an image!")
-      setUploadNotImage(true)
-      setCatImage(logo)
-      setCatImageUploaded(true)
-      console.log("uploadNotImage is " + uploadNotImage)
-      return;
-    }
-      
-    const reader = new FileReader();
-    reader.onload = () => {
-      if(reader.readyState === 2){
-        setCatImage(reader.result)
-        setCatImageUploaded(false)
-      } 
-    }
-
-    console.log(e.target.files[0])
-    reader.readAsDataURL(e.target.files[0])
-
+  // Function for changing the catImage state
+  const settingCatImage = (result) => {
+    setCatImage(result)
   }
 
-  // function for handling dialog opening
-  const handleClickOpen = () => {
-    setOpenDialog(true);
-    console.log("Dialog opened!")
-
-    // get file data
-    // I need file object... catImage is the image itself in base64...
-    let img = document.getElementById('outlined-button').files[0]
-    let formData = new FormData()
-    formData.append('img', img, img['name'])
-
-    let requestOptions = {
-      method: 'POST',
-      body: formData
-    };
-
-    // send POST request to REST API
-    fetch('https://whatscat-api.ml/v1/predict', requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      let predictions = result['predictions']
-      const topPredictions = 3
-      catBreedResultsList = []
-
-      for(let i = 0; i < topPredictions; i++){  
-        catBreedResultsList.push({
-          id: i + 1,
-          catBreed: predictions[i][1],
-          percentage: predictions[i][0]
-        });
-      }
-      console.log('Success:', catBreedResultsList)
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-    
-  };
-  
-  // function for handling dialog closing
-  const handleClose = () => {
-    setOpenDialog(false);
-    console.log("Dialog closed!")
-  };
-
-  // function for handling error alert closing
-  const handleAlertClose = () => {
-    setUploadNotImage(false);
+  // Function for changing the finalResult state
+  const settingFinalResult = (result) => {
+    setFinalResult(result)
   }
 
-  // function for handling non-image uploaded files
-  // const uploadValidationResponse = () => {
-  //   console.log("The uploaded file is not an image!")
-  //   setUploadNotImage(true)
-  //   setCatImage(logo)
-  //   console.log("uploadNotImage is " + uploadNotImage)
-  // }
+  // Function for changing the responseOk state
+  const settingResponseOk = (value) => {
+    setResponseOk(value)
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <Router>
           <Routes> 
-            <Route path='/' element={
+            <Route path="/" element={
               <>
                 <Helmet>
                   <title>Image Capture — WhatsCat</title>
                 </Helmet>
-                {/* Image Capture screen */}
-                <Header title='Image Capture' icon={brandLogo}/>
-                {/* <Alert severity="error">The uploaded file must be an image (only accepts .png and .jpeg)</Alert> */}
-                <ErrorAlert uploadNotImage={uploadNotImage} onClick={handleAlertClose} />
-                <Container maxWidth="md" 
-                           sx={{
-                              my: 5,
-                           }}
-                >
-                  <Grid container 
-                        spacing={2} 
-                        justifyContent="center"
-                        alignItems="center"
-                  >
-                    <Grid item xs={12} md={10} textAlign={"center"}>
-                      <img src={catImage} alt="displaying cat" id="img" style={{ width: "75%", height: "auto" }}/>
-                    </Grid>
-                    <Grid item xs={9} md={10} textAlign={"center"}>
-                      <Typography variant="caption">Minimum image dimensions are 300x300 (only accepts .png, .jpg, and .jpeg), make sure it's not blurry to avoid problems!</Typography>
-                    </Grid>
-                    <Grid item xs={9} md={5} textAlign={"center"}>
-                      <ButtonOutlined inputType='file' captureType='user' acceptType='image/*' onChange={imageHandler} buttonText='Capture Image' />          
-                    </Grid>
-                    <Grid item xs={9} md={5} textAlign={"center"}>
-                      <ButtonOutlined inputType='file' acceptType='image/*' onChange={imageHandler} buttonText='Upload Image'/>
-                    </Grid>
-                    <Grid item xs={9} md={10} textAlign={"center"}>
-                      <ButtonContained inputType='submit' buttonText='Submit' imageUploaded={catImageUploaded} onClick={handleClickOpen}/>
-                    </Grid>
-                  </Grid>
-                  
-                  {/* Alert dialog */}
-                  <AlertDialog openDialog={openDialog} handleClose={handleClose} imageUploaded={catImageUploaded}/>
-                </Container>
+                <ImageCapturePage catImage={catImage} settingCatImage={settingCatImage} settingFinalResult={settingFinalResult} settingResponseOk={settingResponseOk}/>
               </>
             }></Route>
-            <Route path='/result' element={
+            <Route path="/result" element={
               <>
                 <Helmet>
                   <title>Results — WhatsCat</title>
                 </Helmet>
-                {/* Result screen */}
-                <HeaderCancel title='Result' icon={brandLogo}/>
-                <Container maxWidth="md"
-                           sx={{
-                              my: 5,
-                           }}
-                >
-                  <Grid container
-                        spacing={2} 
-                        justifyContent="center"
-                        alignItems="center"
-                  >
-                    <Grid item xs={12} md={10} textAlign={"center"}>
-                      <img src={catImage} alt="displaying cat" id="img" style={{ width: "75%", height: "auto" }}/>
-                    </Grid>
-                    <Grid item xs={9} md={10} textAlign={"center"}>
-                      <Typography variant="body1">
-                        This cat is a <Typography style={{ display: 'inline-block' }} color="primary"><strong>{catBreedResultsList[0].catBreed.toLowerCase()}</strong></Typography>
-                        <Typography variant="caption">
-                          <Link to='/' style={{ textDecoration: 'none' }}><p>TRY AGAIN</p></Link>
-                        </Typography>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid container
-                        rowSpacing={2} 
-                        justifyContent="center"
-                        alignItems="center"
-                  >
-                    
-                    <CatBreedResult catBreedResultsList={catBreedResultsList}/>
-                    
-                  </Grid>
-                </Container>
+                <ResultsPage catImage={catImage} finalResult={finalResult} responseOk={responseOk}/>
               </>
             }></Route>
           </Routes>

@@ -1,18 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
+import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 
-const Input = styled('input')({
-    display: 'none',
+const Input = styled("input")({
+    display: "none",
 });
 
 const ButtonContained = ({ inputType, buttonText, imageUploaded, onClick }) => {
     return (
-        <label htmlFor='contained-button'>
+        <label htmlFor="contained-button">
             <Input
-                id='contained-button' 
+                id="contained-button" 
                 type={inputType}
                 disabled={imageUploaded} 
             />
