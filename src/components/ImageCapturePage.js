@@ -2,6 +2,7 @@ import { React, useState, useEffect } from "react"
 import PropTypes from "prop-types"
 
 import { Container, Grid, Typography } from "@mui/material"
+import Compressor from 'compressorjs';
 
 import Header from "./Header"
 import ErrorAlert from "./ErrorAlert"
@@ -113,38 +114,51 @@ const ImageCapturePage = ({ catImage, settingCatImage, settingFinalResult, setti
         settingFinalResult(catBreedResultsList)
         
         // Get the file data
-        let img = document.getElementById("outlined-button").files[0]
-        let formData = new FormData()
-        formData.append("img", img, img["name"])
+        let file = document.getElementById("outlined-button").files[0]
 
-        let requestOptions = {
-            method: "POST",
-            body: formData
-        };
+        // compress image before uploading to API
+        let compressor = new Compressor(file, {
+            quality: 0.6,
+            mimeType: 'image/jpeg',
+            convertTypes: ['image/png', 'image/jpeg'],
 
-        // Send POST request to REST API
-        fetch("https://whatscat-api.ml/v1/predict", requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            let predictions = result["predictions"]
-            const topPredictions = 5
-            
-
-            for(let i = 0; i < topPredictions; i++){  
-                catBreedResultsList.push({
-                id: i + 1,
-                catBreed: predictions[i][1],
-                percentage: predictions[i][0]
-                });
-            }
-
-            settingFinalResult(catBreedResultsList)
-            settingResponseOk(true)
-            console.log("Success:", catBreedResultsList)
-        })
-        .catch(error => {
-            console.error("Error:", error);
+            success(img) {
+                let formData = new FormData()
+                formData.append("img", img, file["name"])
+          
+                let requestOptions = {
+                    method: "POST",
+                    body: formData
+                };
+          
+                fetch("https://whatscat-api.ml/v1/predict", requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    let predictions = result["predictions"]
+                    const topPredictions = 5
+                    
+        
+                    for(let i = 0; i < topPredictions; i++){  
+                        catBreedResultsList.push({
+                        id: i + 1,
+                        catBreed: predictions[i][1],
+                        percentage: predictions[i][0]
+                        });
+                    }
+        
+                    settingFinalResult(catBreedResultsList)
+                    settingResponseOk(true)
+                    console.log("Success:", catBreedResultsList)
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                })
+              },
+              error(err) {
+                console.log(err.message);
+              },
         });
+
     };
 
     return (
