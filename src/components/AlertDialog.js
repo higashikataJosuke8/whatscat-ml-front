@@ -1,29 +1,16 @@
-import React from 'react';
-import {Link} from 'react-router-dom'
-import PropTypes from 'prop-types';
+import React from "react"
+import { Link } from "react-router-dom"
+import PropTypes from "prop-types"
 
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
+import { Button, Dialog, DialogTitle, DialogActions } from "@mui/material"
 
-
-const AlertDialog = ({ openDialog, handleClose, imageUploaded }) => {
-    // const [open, setOpen] = useState(false);
-
-    // const handleClickOpen = () => {
-    //     setOpen(true);
-    // };
+const AlertDialog = ({ openDialog, handleClickCloseDialog, handleFetchAndClose, imageUploaded }) => {
     
-    // const handleClose = () => {
-    //     setOpen(false);
-    // };
-
     return (
         <div>
            <Dialog
                 open={openDialog}
-                onClose={handleClose}
+                onClose={handleClickCloseDialog}
                 aria-labelledby="alert-dialog-title"
                 PaperProps={{ sx: { width: "212px", height: "124px" } }}
             >
@@ -32,9 +19,9 @@ const AlertDialog = ({ openDialog, handleClose, imageUploaded }) => {
                 </DialogTitle>
 
                 <DialogActions>
-                    <Button onClick={handleClose} sx={{ mr: 1 }}>Cancel</Button>
-                    <Link to={imageUploaded ? '#' : '/result'} style={{ textDecoration: 'none' }}>
-                        <Button variant="contained" onClick={handleClose} autoFocus>Proceed</Button>
+                    <Button onClick={handleClickCloseDialog} sx={{ mr: 1 }}>Cancel</Button>
+                    <Link to={imageUploaded ? "#" : "/result"} style={{ textDecoration: "none" }}>
+                        <Button variant="contained" onClick={handleFetchAndClose} autoFocus>Proceed</Button>
                     </Link>
                 </DialogActions>
             </Dialog> 
@@ -49,7 +36,8 @@ AlertDialog.defaultProps = {
 
 AlertDialog.propTypes = {
     openDialog: PropTypes.bool,
-    handleClose: PropTypes.func,
+    handleClickCloseDialog: PropTypes.func,
+    handleFetchAndClose: PropTypes.func,
     imageUploaded: PropTypes.bool
 }
 

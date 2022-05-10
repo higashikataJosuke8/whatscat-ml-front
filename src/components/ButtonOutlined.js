@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
+import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 
-const Input = styled('input')({
-    display: 'none',
+const Input = styled("input")({
+    display: "none",
 });
 
 const ButtonOutlined = ({ inputType, captureType, acceptType, onChange, buttonText }) => {

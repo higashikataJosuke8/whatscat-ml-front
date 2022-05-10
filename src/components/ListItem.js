@@ -1,9 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types';
+import React from "react"
+import PropTypes from "prop-types";
 
-import Grid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
-import { Typography } from '@mui/material';
+import { Grid, Divider, Typography } from "@mui/material"
 
 const ListItem = ({ catItem }) => {
   return (
@@ -20,7 +18,7 @@ const ListItem = ({ catItem }) => {
         </Grid>
         <Grid item xs={6} md={2} textAlign={"right"}>
             <Typography variant="body1" color={catItem.id === 1 && "primary"}>
-                {catItem.percentage}%
+                {(catItem.percentage * 100).toFixed(2)}%
             </Typography>
         </Grid>
     </>

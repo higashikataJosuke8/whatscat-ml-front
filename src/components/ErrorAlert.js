@@ -1,14 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react"
+import PropTypes from "prop-types"
 
-import Alert from '@mui/material/Alert';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import { Alert, Collapse, IconButton } from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
 
-const ErrorAlert = ({ uploadNotImage, onClick }) => {
+const ErrorAlert = ({ uploadErrorAlert, onClick }) => {
     return (
-        <Collapse in={uploadNotImage}>
+        <Collapse in={uploadErrorAlert}>
             <Alert 
                 severity="error"
                 sx={{ mb: 2 }}
@@ -30,7 +28,7 @@ const ErrorAlert = ({ uploadNotImage, onClick }) => {
 }
 
 ErrorAlert.propTypes = {
-    uploadNotImage: PropTypes.bool,
+    uploadErrorAlert: PropTypes.bool,
     onClick: PropTypes.func
 }
 

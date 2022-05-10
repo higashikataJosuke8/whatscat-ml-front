@@ -1,2 +1,2 @@
 # whatscat-ml-front
-front-end of the whatscat-ml project
+This repository serves as the front-end of the whatscat-ml project.
