@@ -22,7 +22,6 @@ const ImageCapturePage = ({ catImage, settingCatImage, settingFinalResult, setti
     const [openDialog, setOpenDialog] = useState(false);
 
     useEffect(() => {
-        console.log("Resetting states")
         settingCatImage(noImagePresent)
         settingFinalResult(null)
         settingResponseOk(false)
@@ -31,23 +30,19 @@ const ImageCapturePage = ({ catImage, settingCatImage, settingFinalResult, setti
     // Image handler (for responsive image uploads), also used for knowing whether a cat image is uploaded already,
     // also used on checking whether the upload is an image or not.
     const imageHandler = (e) => {
-        console.log("Image handler commencing...")
         
         // Code for handling non-image uploads
         const image = e.target.files[0]
         const imageType = image["type"]
-        console.log("imageType has a typeof " + typeof(imageType))
         const validImageTypes = ["image/jpeg", "image/png", "image/jpg"]
         
         if (!validImageTypes.includes(imageType)){
-            console.log("The uploaded file is not an image!")
             // Makes the error alert appear
             setUploadErrorAlert(true)
             // Defaults to original icon
             settingCatImage(noImagePresent)
             // Disables the Submit button
             setImageUploaded(true)
-            console.log("uploadErrorAlert is " + uploadErrorAlert)
             return;
         }
         
@@ -60,7 +55,6 @@ const ImageCapturePage = ({ catImage, settingCatImage, settingFinalResult, setti
             } 
         }
 
-        console.log(e.target.files[0])
         reader.readAsDataURL(e.target.files[0])
 
     }
@@ -68,13 +62,11 @@ const ImageCapturePage = ({ catImage, settingCatImage, settingFinalResult, setti
     // Function for handling dialog opening
     const handleClickOpenDialog = () => {
         setOpenDialog(true);
-        console.log("Dialog opened!")
     };
     
     // Function for handling dialog closing
     const handleClickCloseDialog = () => {
         setOpenDialog(false);
-        console.log("Dialog closed!")
     };
 
     // Function for handling error alert closing
@@ -85,29 +77,6 @@ const ImageCapturePage = ({ catImage, settingCatImage, settingFinalResult, setti
     // Function for handling dialog closing and handling requests and responses via REST API
     const handleFetchAndClose = () => {
         setOpenDialog(false);
-        console.log("Dialog closed and fetch commencing!");
-        
-        // // Dummy data, for temporary use if whatscat-api is unavailable
-        // let catBreedResultsList = [
-        //     {
-        //         id: 1,
-        //         catBreed: "Tuxedo",
-        //         percentage: 0.6
-        //     },
-        //     {
-        //         id: 2,
-        //         catBreed: "Domestic Shorthair",
-        //         percentage: 0.3
-        //     },
-        //     {
-        //         id: 3,
-        //         catBreed: "Chausie",
-        //         percentage: 0.1
-        //     }
-        // ];
-
-        // settingFinalResult(catBreedResultsList);
-        // settingResponseOk(true);
         
         // Initialize catBreedResultsList and assign the value to settingFinalResult
         let catBreedResultsList = []
@@ -148,10 +117,9 @@ const ImageCapturePage = ({ catImage, settingCatImage, settingFinalResult, setti
         
                     settingFinalResult(catBreedResultsList)
                     settingResponseOk(true)
-                    console.log("Success:", catBreedResultsList)
                 })
-                .catch(error => {
-                    console.error("Error:", error);
+                .catch(err => {
+                    console.error("Error:", err);
                 })
               },
               error(err) {

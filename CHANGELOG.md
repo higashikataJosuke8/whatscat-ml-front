@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2022-04-dd 
+## [1.0.0] - 2022-05-10 
 
 ### Added
 - Added CHANGELOG.md
