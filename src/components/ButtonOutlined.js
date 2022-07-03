@@ -8,13 +8,12 @@ const Input = styled("input")({
     display: "none",
 });
 
-const ButtonOutlined = ({ inputType, captureType, acceptType, onChange, buttonText }) => {
+const ButtonOutlined = ({ inputType, acceptType, onChange, buttonText }) => {
     return (
         <label htmlFor="outlined-button">
             <Input 
                 id="outlined-button"
-                type={inputType} 
-                capture={captureType} 
+                type={inputType}  
                 accept={acceptType} 
                 onChange={onChange}
                 onClick={(e) => {e.target.value = null}}
@@ -32,7 +31,6 @@ ButtonOutlined.defaultProps = {
 
 ButtonOutlined.propTypes = {
     inputType: PropTypes.string,
-    captureType: PropTypes.string,
     acceptType: PropTypes.string,
     onChange: PropTypes.func,
     buttonText: PropTypes.string

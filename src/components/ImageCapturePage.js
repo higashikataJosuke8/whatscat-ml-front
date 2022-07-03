@@ -149,10 +149,7 @@ const ImageCapturePage = ({ catImage, settingCatImage, settingFinalResult, setti
                 <Grid item xs={9} md={10} textAlign={"center"}>
                     <Typography variant="caption">Minimum image dimensions are 300x300 (only accepts .png, .jpg, and .jpeg), make sure it's not blurry to avoid problems!</Typography>
                 </Grid>
-                <Grid item xs={9} md={5} textAlign={"center"}>
-                    <ButtonOutlined inputType="file" captureType="environment" acceptType="image/*" onChange={imageHandler} buttonText="Capture Image"/>          
-                </Grid>
-                <Grid item xs={9} md={5} textAlign={"center"}>
+                <Grid item xs={9} md={10} textAlign={"center"}>
                     <ButtonOutlined inputType="file" acceptType="image/*" onChange={imageHandler} buttonText="Upload Image"/>
                 </Grid>
                 <Grid item xs={9} md={10} textAlign={"center"}>

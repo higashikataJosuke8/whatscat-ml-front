@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Removed the capture button
+
+### Fixed
+- Fixed an issue where if the website is browsed in mobile, the user cannot upload any image and is only prompted to capture an image via their phone's camera.
+
 ## [1.0.0] - 2022-05-10 
 
 ### Added

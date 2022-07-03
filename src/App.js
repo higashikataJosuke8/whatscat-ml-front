@@ -81,7 +81,7 @@ function App() {
             <Route path="/result" element={
               <>
                 <Helmet>
-                  <title>Results — WhatsCat</title>
+                  <title>Result — WhatsCat</title>
                 </Helmet>
                 <ResultsPage catImage={catImage} finalResult={finalResult} responseOk={responseOk}/>
               </>
